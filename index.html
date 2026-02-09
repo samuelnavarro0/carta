@@ -125,12 +125,25 @@
 
         function sendLocalNotification(titulo) {
             if (Notification.permission === 'granted') {
-                const notification = new Notification("¡Nueva carta de Amor! 💌", {
-                    body: "Duna ha escrito: " + titulo,
-                    icon: 'https://cdn-icons-png.flaticon.com/512/2904/2904973.png'
-                });
-                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                notification.onclick = () => { window.focus(); notification.close(); };
+                // Forzamos que la notificación se lance a través del Service Worker si existe, 
+                // o directamente si no.
+                const opciones = {
+                    body: "Duna, tienes un nuevo mensaje: " + titulo,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2904/2904973.png',
+                    vibrate: [200, 100, 200],
+                    badge: 'https://cdn-icons-png.flaticon.com/512/2904/2904973.png', // Icono pequeño en la barra
+                    tag: 'nueva-carta' // Evita que se colapsen si mandas varias
+                };
+        
+                // Esto intenta despertar al sistema de notificaciones de Android
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification("¡Nueva carta de Amor! 💌", opciones);
+                    });
+                } else {
+                    // Si no hay Service Worker, usamos el método normal
+                    new Notification("¡Nueva carta de Amor! 💌", opciones);
+                }
             }
         }
 
@@ -186,3 +199,4 @@
     </script>
 </body>
 </html>
+
