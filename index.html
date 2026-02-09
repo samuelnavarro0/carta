@@ -36,12 +36,44 @@
         .heart::before { top: -18px; left: 0; }
         .heart::after { left: -18px; top: 0; }
         @keyframes heartbeat { 0%, 100% { transform: translate(-50%, -50%) rotate(45deg) scale(1); } 50% { transform: translate(-50%, -50%) rotate(45deg) scale(1.1); } }
-        .letter { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 70%; background: #fff; padding: 20px; box-sizing: border-box; border-radius: 5px; z-index: 2; transition: all 0.6s ease-in-out; display: flex; flex-direction: column; align-items: center; text-align: center; font-family: 'Patrick Hand', cursive; color: #555; opacity: 0; }
+        .letter { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        width: 80%; 
+        height: 70%; 
+        background: #fff; 
+        padding: 20px; 
+        box-sizing: border-box; 
+        border-radius: 5px; 
+        z-index: 2; 
+        transition: all 0.6s ease-in-out; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        text-align: center; 
+        font-family: 'Patrick Hand', cursive; 
+        color: #555; 
+        opacity: 0;
+        /* Ajustes para textos largos */
+        overflow-y: auto; 
+        max-height: 350px; /* Evita que la carta sea más alta que la pantalla */
+        }        
         .letter h2 { margin: 0; color: #ff4757; font-size: 1.5rem; }
         .letter p { margin: 10px 0 0; line-height: 1.3; font-size: 1rem; }
         .envelope-wrapper.open .flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-wrapper.open .heart, .envelope-wrapper.open .wing { opacity: 0; transform: scale(0); }
-        .envelope-wrapper.open .letter { bottom: 70px; z-index: 6; height: 220px; width: 90%; opacity: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition-delay: 0.1s; }
+        .envelope-wrapper.open .letter { 
+            bottom: 100px; 
+            z-index: 6; 
+            height: auto;      /* <--- Esto hace que la altura sea automática */
+            min-height: 200px; /* <--- Mantiene un tamaño mínimo bonito */
+            width: 90%; 
+            opacity: 1; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            transition-delay: 0.1s; 
+        }        
         @media (max-height: 500px) { .envelope-wrapper { transform: scale(0.8); } .envelope-wrapper:hover { transform: scale(0.82); } }
 
         /* --- ESTILOS NUEVOS PARA EL HISTORIAL (No afectan al sobre) --- */
@@ -189,6 +221,7 @@
     </script>
 </body>
 </html>
+
 
 
 
