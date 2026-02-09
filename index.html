@@ -196,7 +196,31 @@
 
         function openHistory() { document.getElementById('historyModal').style.display = 'flex'; }
         function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
+        // Registrar el Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Robot de notificaciones activo', reg))
+                    .catch(err => console.error('Error al registrar el robot', err));
+            });
+        }
+        
+        // Modificar tu función de notificación para usar el robot
+        function sendLocalNotification(titulo) {
+            if (Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification("¡Nueva carta de Amor! 💌", {
+                        body: "Duna ha escrito: " + titulo,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/2904/2904973.png',
+                        vibrate: [200, 100, 200],
+                        tag: 'nueva-carta',
+                        renotify: true // Para que vuelva a vibrar si llega otra
+                    });
+                });
+            }
+        }
     </script>
 </body>
 </html>
+
 
