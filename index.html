@@ -10,12 +10,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* --- TU ESTILO ORIGINAL INTACTO --- */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
             height: 100vh; min-height: -webkit-fill-available; overflow: hidden;
             font-family: 'Fredoka One', cursive;
-            /* Aquí está tu imagen en base64 original */
             background-image: url('cover.jpg'); 
             background-size: cover; background-position: center center;
             background-repeat: no-repeat; background-attachment: fixed;
@@ -36,79 +34,35 @@
         .heart::before { top: -18px; left: 0; }
         .heart::after { left: -18px; top: 0; }
         @keyframes heartbeat { 0%, 100% { transform: translate(-50%, -50%) rotate(45deg) scale(1); } 50% { transform: translate(-50%, -50%) rotate(45deg) scale(1.1); } }
+        
         .letter { 
-        position: absolute; 
-        bottom: 0; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        width: 80%; 
-        height: 70%; 
-        background: #fff; 
-        padding: 20px; 
-        box-sizing: border-box; 
-        border-radius: 5px; 
-        z-index: 2; 
-        transition: all 0.6s ease-in-out; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        text-align: center; 
-        font-family: 'Patrick Hand', cursive; 
-        color: #555; 
-        opacity: 0;
-        /* Ajustes para textos largos */
-        overflow-y: auto; 
-        max-height: 350px; /* Evita que la carta sea más alta que la pantalla */
-        }        
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 70%; background: #fff; padding: 20px; box-sizing: border-box; border-radius: 5px; z-index: 2; transition: all 0.6s ease-in-out; display: flex; flex-direction: column; align-items: center; text-align: center; font-family: 'Patrick Hand', cursive; color: #555; opacity: 0;
+            overflow-y: auto; max-height: 350px; 
+        }
         .letter h2 { margin: 0; color: #ff4757; font-size: 1.5rem; }
         .letter p { margin: 10px 0 0; line-height: 1.3; font-size: 1rem; }
         .envelope-wrapper.open .flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-wrapper.open .heart, .envelope-wrapper.open .wing { opacity: 0; transform: scale(0); }
-        .envelope-wrapper.open .letter { 
-            bottom: 100px; 
-            z-index: 6; 
-            height: auto;      /* <--- Esto hace que la altura sea automática */
-            min-height: 200px; /* <--- Mantiene un tamaño mínimo bonito */
-            width: 90%; 
-            opacity: 1; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            transition-delay: 0.1s; 
-        }        
+        .envelope-wrapper.open .letter { bottom: 100px; z-index: 6; height: auto; min-height: 200px; width: 90%; opacity: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition-delay: 0.1s; }
+        
         @media (max-height: 500px) { .envelope-wrapper { transform: scale(0.8); } .envelope-wrapper:hover { transform: scale(0.82); } }
 
-        /* --- ESTILOS NUEVOS PARA EL HISTORIAL (No afectan al sobre) --- */
-        .history-btn {
-            position: fixed; bottom: 20px; left: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border: none; padding: 10px 15px; border-radius: 20px;
-            font-family: 'Fredoka One', cursive; color: #ff4757;
-            cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
-        .history-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 200;
-            justify-content: center; align-items: center;
-        }
-        .history-content {
-            background: white; width: 80%; max-width: 300px;
-            border-radius: 15px; padding: 20px;
-            max-height: 60vh; overflow-y: auto;
-            font-family: 'Patrick Hand', cursive;
-        }
-        .history-item {
-            padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;
-        }
+        /* Botones y Modales */
+        .history-btn { position: fixed; bottom: 20px; left: 20px; background: rgba(255, 255, 255, 0.8); border: none; padding: 10px 15px; border-radius: 20px; font-family: 'Fredoka One', cursive; color: #ff4757; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; }
+        
+        /* BOTÓN DE NOTIFICACIONES */
+        .notify-btn { position: fixed; top: 20px; right: 20px; background: #ff4757; border: none; padding: 10px 15px; border-radius: 20px; font-family: 'Fredoka One', cursive; color: white; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; font-size: 0.8rem; display: none; }
+
+        .history-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
+        .history-content { background: white; width: 80%; max-width: 300px; border-radius: 15px; padding: 20px; max-height: 60vh; overflow-y: auto; font-family: 'Patrick Hand', cursive; }
+        .history-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
         .history-item:hover { background: #fff0f3; }
-        .close-history {
-            background: #ff4757; color: white; border: none;
-            padding: 5px 10px; border-radius: 5px; margin-top: 10px;
-            width: 100%; cursor: pointer; font-family: 'Fredoka One', cursive;
-        }
+        .close-history { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; margin-top: 10px; width: 100%; cursor: pointer; font-family: 'Fredoka One', cursive; }
     </style>
 </head>
 <body>
 
+    <button class="notify-btn" id="notifyBtn" onclick="requestPermission()">🔔 Activar Avisos</button>
     <button class="history-btn" onclick="openHistory()">💌 Cartas Anteriores</button>
 
     <div class="history-modal" id="historyModal">
@@ -128,15 +82,15 @@
             <div class="heart"></div>
             <div class="letter">
                 <h2 id="letterTitle">Cargando...</h2>
-                <p id="letterText">Esperando carta...</p>
-                <p style="margin-top: auto; font-size: 0.9rem;">Toca para cerrar</p>
+                <div id="letterTextContainer" style="overflow-y: auto; margin-top: 10px;">
+                    <p id="letterText">Esperando carta...</p>
+                </div>
+                <p style="margin-top: auto; font-size: 0.8rem; color: #aaa;">Toca para cerrar</p>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURACIÓN DE FIREBASE ---
-        // ¡¡¡ PEGA AQUÍ TU CONFIGURACIÓN DEL PASO 1 !!!
         const firebaseConfig = {
             apiKey: "AIzaSyAXhQzt9zenYwsceZBZ2D3939EykqB-HAE",
             authDomain: "cartas-amor-941ab.firebaseapp.com",
@@ -148,38 +102,58 @@
             measurementId: "G-Q73LNTKGD2"
         };
 
-        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let allLetters = [];
+        let isFirstLoad = true; 
 
-        // --- 2. LEER CARTAS AL INICIAR ---
+        // --- LÓGICA DE NOTIFICACIONES ---
+        const notifyBtn = document.getElementById('notifyBtn');
+
+        if (Notification.permission === 'default') {
+            notifyBtn.style.display = 'block';
+        }
+
+        function requestPermission() {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    notifyBtn.style.display = 'none';
+                    new Notification("¡Todo listo! ❤️ Te avisaré aquí cuando Duna escriba.");
+                }
+            });
+        }
+
+        function sendLocalNotification(titulo) {
+            if (Notification.permission === 'granted') {
+                const notification = new Notification("¡Nueva carta de Amor! 💌", {
+                    body: "Duna ha escrito: " + titulo,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2904/2904973.png'
+                });
+                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                notification.onclick = () => { window.focus(); notification.close(); };
+            }
+        }
+
+        // --- LEER DE FIREBASE ---
         const lettersRef = database.ref('cartas');
         
         lettersRef.on('value', (snapshot) => {
             const data = snapshot.val();
             const historyList = document.getElementById('historyList');
-            historyList.innerHTML = ''; // Limpiar lista
-            allLetters = [];
+            historyList.innerHTML = ''; 
 
             if (data) {
-                // Convertir objeto a array y ordenar (la más nueva primero)
                 const lettersArray = Object.keys(data).map(key => data[key]);
-                // Ordenar por timestamp descendente
                 lettersArray.sort((a, b) => b.timestamp - a.timestamp);
-                allLetters = lettersArray;
 
-                // 2.1 Mostrar la ÚLTIMA carta en el sobre automáticamente
-                if (lettersArray.length > 0) {
-                    loadLetterIntoEnvelope(lettersArray[0]);
-                } else {
-                    document.getElementById('letterTitle').innerText = "Hola Amor";
-                    document.getElementById('letterText').innerText = "Aún no hay cartas nuevas.";
+                // Notificar si hay una nueva carta y no es la primera vez que carga la web
+                if (!isFirstLoad) {
+                    sendLocalNotification(lettersArray[0].title);
                 }
 
-                // 2.2 Llenar el historial
-                lettersArray.forEach((letter, index) => {
+                loadLetterIntoEnvelope(lettersArray[0]);
+
+                lettersArray.forEach((letter) => {
                     const div = document.createElement('div');
                     div.className = 'history-item';
                     const date = new Date(letter.timestamp).toLocaleDateString();
@@ -187,7 +161,6 @@
                     div.onclick = () => {
                         loadLetterIntoEnvelope(letter);
                         closeHistory();
-                        // Si está abierto, hacemos un efecto visual
                         if(envelope.classList.contains('open')){
                             envelope.classList.remove('open');
                             setTimeout(() => envelope.classList.add('open'), 600);
@@ -195,8 +168,8 @@
                     };
                     historyList.appendChild(div);
                 });
-            } else {
-                historyList.innerHTML = '<p style="text-align:center">No hay cartas guardadas.</p>';
+                
+                isFirstLoad = false; // Marcamos que ya cargó la primera vez
             }
         });
 
@@ -205,23 +178,11 @@
             document.getElementById('letterText').innerText = letter.text;
         }
 
-        // --- 3. LÓGICA DEL SOBRE (Tuya original) ---
         const envelope = document.getElementById('envelope');
-        envelope.addEventListener('click', toggleEnvelope);
-        envelope.addEventListener('touchstart', toggleEnvelope, {passive: true});
+        envelope.addEventListener('click', () => envelope.classList.toggle('open'));
 
-        function toggleEnvelope(e) {
-            if (e.type === 'touchstart') e.preventDefault(); 
-            envelope.classList.toggle('open');
-        }
-
-        // --- 4. LÓGICA DEL HISTORIAL ---
         function openHistory() { document.getElementById('historyModal').style.display = 'flex'; }
         function closeHistory() { document.getElementById('historyModal').style.display = 'none'; }
     </script>
 </body>
 </html>
-
-
-
-
